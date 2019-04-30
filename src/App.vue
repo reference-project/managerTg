@@ -1,28 +1,55 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <div class="index">
+      <div class="top"></div>
+      <router-link to="/index" class="a">首页</router-link>
+      <router-link to="/addfoods" class="a">商品管理</router-link>
+      <router-link to="/cs" class="a">测试</router-link>
+    </div>
+    <div class="content">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
-
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'app',
-  components: {
-    HelloWorld
+  data() {
+    return {};
+  },
+  methods: {}
+};
+</script>
+<style lang='scss'>
+* {
+  margin: 0;
+  padding: 0;
+}
+.index {
+  width: 130px;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  background: rgba(141, 141, 141, 0.5);
+  .top {
+    width: 130px;
+    height: 65px;
+    background: rgb(41, 192, 181);
+  }
+  .a {
+    display: block;
+    text-align: center;
+    color: white;
+    height: 50px;
+    width: 110px;
+    margin-left: 10px;
+    line-height: 50px;
+    text-decoration: none;
+    border-bottom: 1px solid white;
   }
 }
-</script>
-
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.content {
+  width: 800px;
+  height: 800px;
+  margin-left: 138px;
 }
 </style>
