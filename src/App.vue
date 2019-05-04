@@ -4,7 +4,8 @@
       <div class="top"></div>
       <router-link to="/index" class="a">首页</router-link>
       <router-link to="/addfoods" class="a">商品管理</router-link>
-      <router-link to="/cs" class="a">测试</router-link>
+      <router-link to="/cs" class="a">商品上架</router-link>
+      <router-link to="/listFoods" class="a">商品列表</router-link>
     </div>
     <div class="content">
       <router-view></router-view>

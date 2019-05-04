@@ -4,6 +4,7 @@ import index from './view/index/index.vue'
 import addfoods from './view/addFoods/index.vue'
 import Login from './view/login/login.vue'
 import cs from './view/cs/cs.vue'
+import listFoods from './view/listFoods/index.vue'
 Vue.use(Router)
 export default new Router({
     routes:[
@@ -27,6 +28,10 @@ export default new Router({
             path:'/cs',
             name:'cs',
             component:cs
+        },{
+            path:'/listFoods',
+            name:'listFoods',
+            component:listFoods
         }
     ]
 })

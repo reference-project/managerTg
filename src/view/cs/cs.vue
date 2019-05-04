@@ -11,13 +11,13 @@
       <el-col :span="12">
         <div class="grid-content">
           商品名称:
-          <input type="text">
+          <input v-model="foodsName" type="text">
         </div>
       </el-col>
       <el-col :span="12">
         <div class="grid-content">
           商品规格:
-          <input placeholder=":例如多少克一份" type="text">
+          <input v-model="Specifications" placeholder=":例如多少克一份" type="text">
         </div>
       </el-col>
     </el-row>
@@ -25,15 +25,40 @@
       <el-col :span="12">
         <div class="grid-content">
           所属分类:
-          <input type="text">
+          <select name="select" v-model="couponSelected" class="myCategory">
+            <option
+              :key="index"
+              v-for="(item,index) in categoryArry"
+              :value="item.cateGoryId"
+            >{{item.cateGoryName}}</option>
+          </select>
         </div>
       </el-col>
       <el-col :span="12">
         <div class="grid-content">
           库存数量:
           <input type="t
-            ext">
+            ext" v-model="number" placeholder="0">
         </div>
+      </el-col>
+    </el-row>
+    <el-row class="foodsDes">
+      <el-col :span="12">
+        <div class="grid-content">
+          商品价格:
+          <input v-model="price" type="text" placeholder="￥">
+        </div>
+      </el-col>
+      <el-col :span="12">
+        <div class="grid-content">
+          对比的价格:
+          <input v-model="oldPrice" type="text" placeholder="￥">
+        </div>
+      </el-col>
+    </el-row>
+    <el-row class="asMessage">
+      <el-col :span="24">
+        <p>商品轮播图选择,请先处理好图片格式与大小,以免造成上传失败</p>
       </el-col>
     </el-row>
     <div class="vue-uploader">
@@ -62,22 +87,25 @@
         multiple="multiple"
         accept="image/jpg, image/jpeg, image/png, image/bmp"
       >
-      <button @click="getName">得到所有的图片的名字</button>
-      <div v-loading="loading">
-        <!--上传图片时得加载画面-->
-        <VueEditor
-          style="width: 80%"
-          useCustomImageHandler
-          @imageAdded="handleImageAdded"
-          :editorToolbar="customToolbar"
-          v-model="content"
-        ></VueEditor>
-      </div>
+    </div>
+    <div v-loading="loading">
+      <!--上传图片时得加载画面-->
+      <VueEditor
+        style="width: 100%"
+        useCustomImageHandler
+        @imageAdded="handleImageAdded"
+        :editorToolbar="customToolbar"
+        v-model="content"
+      ></VueEditor>
+    </div>
+    <div class="bottom">
+      <button class="addShop" @click="addShops">上架商品</button>
     </div>
   </div>
 </template>
 <script>
 import OSS from "ali-oss";
+import axios from "axios";
 import { VueEditor } from "vue2-editor";
 export default {
   components: {
@@ -101,10 +129,93 @@ export default {
         ["image", "link"],
         ["strike"],
         ["clean"]
-      ]
+      ],
+      foodsName: "",
+      Specifications: "",
+      number: "",
+      price: "",
+      oldPrice: "",
+      categoryArry: [],
+      uploadImgList: [],
+      couponSelected:''//选择的分类ID
     };
   },
+  mounted() {
+    //刚进页面要做什么
+    //获得所有的商品分类
+    //赋值给选择分类的属性
+    this.getCategory();
+  },
+  created() {
+    console.log("页面创建时调用");
+  },
   methods: {
+    async getCategory() {
+      //获得商品分类数据
+      let res = await axios.get("/foods/getCategory");
+      console.log(res);
+      const {
+        status,
+        data: { data }
+      } = res;
+      console.log(status, data);
+      if (status === 200) {
+        this.categoryArry = data;
+      }
+      console.log(this.categoryArry, "测试");
+      console.log(data[0].cateGoryName, "第一条数据");
+    },
+    handleChange(value) {
+      //下拉框改变的方法
+      console.log(value);
+    },
+    async addShops() {
+      console.log("上架商品");
+      //进行检验
+      if(this.foodsName == ''){
+         this.$message('商品名不能为空')
+         return false
+      }
+      if(this.Specifications==''){
+         this.$message('商品规格不能为空')
+         return false
+      }
+      if(this.couponSelected==''){
+        this.$message('未选择分类')
+        return false
+      }
+      if(this.number==''){
+        this.$message('库存不能为空')
+        return false
+      }
+      if(this.uploadImgList.length ==0){
+        this.$message('你没有选择轮播图')
+        return false
+      }
+      if(this.price == ''){
+        this.$message('价格不能为空')
+        return false
+      }
+      //富文本内容和对比价格可以为空
+      //通过验证进行下一步提交到后端保存
+      let data = await axios.get('/foods/addFoods',{
+        params:{
+          foodsName:this.foodsName,
+          Specifications:this.Specifications,
+          number:this.number,
+          price:this.price,
+          oldPrice:this.oldPrice,
+          uploadImgList:this.uploadImgList,
+          couponSelected:this.couponSelected,
+          content:this.content
+        }
+      })
+      console.log(data)
+      if(data.data.code==0){
+        alert('商品上架成功')
+      }
+
+    },
     getName() {
       const client = new OSS({
         region: "oss-cn-shenzhen",
@@ -129,7 +240,7 @@ export default {
       const fNum = this.files;
       for (var i = 0; i < fNum.length; i++) {
         var f = fNum[i].file;
-        console.log(f,'这是上传图片的数据');
+        console.log(f, "这是上传图片的数据");
         const Name = f.name;
         console.log(Name);
         const suffix = Name.substr(Name.indexOf("."));
@@ -147,10 +258,17 @@ export default {
             this.$message.error(`遇到无法上传的文件格式,错误为${err}`);
           });
         console.log(this.myImglist, "mylist");
+        //得到所有上传图片名称的数组,在将mylist的图片进行签名验证返回图片地址
+        let newArr = this.myImglist.map(item => {
+          return client.signatureUrl(item);
+        });
+        this.$alert("图片上传成功", "提示", {
+          confirmBttonText: "确定"
+        });
+        this.status = "finished";
+        console.log(newArr); //得到签名后的图片地址数组
+        this.uploadImgList = newArr;
       }
-      //  axios.get(`/foods/upFoods?data=${this.myImglist}`,).then(res=>{
-      //      console.log(res)
-      //  })
     },
     // 时间戳
     timestamp: function() {
@@ -214,15 +332,31 @@ export default {
     },
     handleImageAdded: function(file, Editor, cursorLocation) {
       //上传图片操作
-      console.log(file.name, "这是图片");
-
+      console.log(file, "这是图片");
+      const clinet = new OSS({
+        region: "oss-cn-shenzhen",
+        accessKeyId: "LTAIDaT373YHmkTC",
+        accessKeySecret: "ndTGswjQlWA2uz1m4Du3Drd73ULN13",
+        bucket: "mycz"
+      });
+      //命名规则
+      let random = Math.floor(Math.random() * 1000);
+      //取一个随机数的一千倍,在加上当前时间戳
+      var timestamp = Date.parse(new Date());
       //把获取到的图片url 插入到鼠标所在位置 回显图片
-      Editor.insertEmbed(cursorLocation,"image",str);
+      let strName = timestamp.toString() + random.toString() + file.name;
+      clinet.multipartUpload(strName, file).then(res => {
+        console.log(res.name);
+        Editor.insertEmbed(
+          cursorLocation,
+          "image",
+          clinet.signatureUrl(res.name)
+        );
+      });
     }
   }
 };
 </script>
-
 <style lang="scss">
 .title {
   p {
@@ -230,6 +364,32 @@ export default {
     font-size: 30px;
     border-bottom: 1px solid gainsboro;
     margin-bottom: 20px;
+  }
+}
+.myCategory{
+  width: 280px;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 8px;
+   option{
+      text-align: center;
+   }
+}
+.bottom {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  .addShop {
+    margin: auto;
+    width: 200px;
+    height: 40px;
+    line-height: 40px;
+    background: rgb(41, 192, 181);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 20px;
   }
 }
 .foodsDes {
@@ -244,8 +404,12 @@ export default {
     border: solid gainsboro 1px;
   }
 }
+.asMessage {
+  border: 1px solid rgb(41, 192, 181);
+}
 .vue-uploader {
   border: 1px solid #e5e5e5;
+  margin: 30px;
 }
 .vue-uploader .file-list {
   padding: 10px 0px;
@@ -262,7 +426,7 @@ export default {
 .vue-uploader .file-list .file-item {
   float: left;
   margin-left: 10px;
-
+  height: 160px;
   position: relative;
   width: 150px;
   text-align: center;
@@ -303,13 +467,14 @@ export default {
   -webkit-box-orient: vertical;
 }
 .vue-uploader .add {
-  width: 150px;
+  width: 50px;
   background: url("../../assets/加.png") no-repeat;
-  height: 150px;
+  background-position: center;
+  height: 50px;
   float: left;
   text-align: center;
-  line-height: 150px;
-  font-size: 30px;
+  line-height: 50px;
+  font-size: 15px;
   cursor: pointer;
   background-size: 100% 100%;
 }
