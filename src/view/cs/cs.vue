@@ -56,6 +56,14 @@
         </div>
       </el-col>
     </el-row>
+     <el-row class="foodsDes">
+      <el-col :span="24">
+        <div class="grid-content">
+          商品ID:
+          <input v-model="foodsid" type="text" placeholder="￥">
+        </div>
+      </el-col>
+    </el-row>
     <el-row class="asMessage">
       <el-col :span="24">
         <p>商品轮播图选择,请先处理好图片格式与大小,以免造成上传失败</p>
@@ -121,6 +129,7 @@ export default {
       myImglist: [],
       content: "",
       loading: false,
+      foodsid:0,
       customToolbar: [
         ["bold", "italic", "underline"],
         [{ align: "" }, { align: "center" }, { align: "right" }],
@@ -162,8 +171,6 @@ export default {
       if (status === 200) {
         this.categoryArry = data;
       }
-      console.log(this.categoryArry, "测试");
-      console.log(data[0].cateGoryName, "第一条数据");
     },
     handleChange(value) {
       //下拉框改变的方法
@@ -200,6 +207,7 @@ export default {
       //通过验证进行下一步提交到后端保存
       let data = await axios.get('/foods/addFoods',{
         params:{
+          foodsid:this.foodsid,
           foodsName:this.foodsName,
           Specifications:this.Specifications,
           number:this.number,

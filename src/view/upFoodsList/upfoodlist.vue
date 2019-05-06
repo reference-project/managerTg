@@ -1,6 +1,6 @@
 <template>
   <div class="listFoods">
-    <p class="title">商品管理列表</p>
+    <p class="title">已经下架的商品</p>
     <div class="searchBroad">
       <input type="text" placeholder="搜索商品请输入商品名字" v-model="searchName">
       <button @click="searchProduct">搜索</button>
@@ -32,7 +32,7 @@
           <li>{{item.foodsPrice}}</li>
           <li>{{item.foodsdescribe}}</li>
           <li>
-            <button @click="down(index)" class="down">下架</button>
+            <button @click="up(index)" class="up">上架</button>
           </li>
           <li>
             <button @click="edit(index)" class="edit">编辑商品</button>
@@ -53,37 +53,40 @@ import axios from "axios";
 export default {
   data() {
     return {
-      start:0,
+      start: 0,
       foodsList: [],
-      searchName:'',
-      categoryArry:[],
-      couponSelected:''
+      searchName: "",
+      categoryArry: [],
+      couponSelected: ""
     };
   },
   mounted() {
     this.getFoodsList();
-    this.getCategory()
+    this.getCategory();
   },
   methods: {
-   async searchProduct(){
-      console.log('搜索')
-      if(this.searchName=='') return false
-      let res = await axios.get('/foods/searchFoods',{
-        params:{
-          keyWord:this.searchName
+    async searchProduct() {
+      console.log("搜索");
+      if (this.searchName == "") return false;
+      let res = await axios.get("/foods/searchFoods", {
+        params: {
+          keyWord: this.searchName
         }
-      })
-      console.log(res)
-      const {status,data:{data}} = res
-      if(status==200){
-        console.log(data)
-        this.foodsList = data
+      });
+      console.log(res);
+      const {
+        status,
+        data: { data }
+      } = res;
+      if (status == 200) {
+        console.log(data);
+        this.foodsList = data;
       }
     },
-   async allProduct(){
-      this.getFoodsList()
+    async allProduct() {
+      this.getFoodsList();
     },
-     async getCategory() {
+    async getCategory() {
       //获得商品分类数据
       let res = await axios.get("/foods/getCategory");
       console.log(res);
@@ -94,13 +97,12 @@ export default {
       console.log(status, data);
       if (status === 200) {
         this.categoryArry = data;
-    
       }
     },
     async getFoodsList() {
-      let result = await axios.get("/foods/getFoodsList", {
+      let result = await axios.get("/foods/getupFoodlist", {
         params: {
-          start:this.start
+          start: this.start
         }
       });
       const {
@@ -112,47 +114,52 @@ export default {
         this.foodsList = data;
       }
     },
-   async down(value){
-      console.log(value)
-      let res = await axios.post('/foods/downFoods',
-      {
-        data:this.foodsList[value]
-      })
-      console.log(res)
-      const {status,data:{data}} = res
-      if(status==200){
-         this.$message('商品下架成功')
-         this.getFoodsList()
-      }
-    },
-    edit(value){
-      console.log(value)
-    }
-  },
-  watch:{
-    couponSelected(){
-      console.log('分类值发生改变')
-      //发送个后端接口,并返回所得到的分类所属内容，此内容不进行分页处理
-      axios.get('/foods/categoryFoods',{
-        params:{
-          couponSelected:this.couponSelected
-        }
-      }).then(res=>{
-        console.log(res)
-         const {
+    async up(value) {
+      console.log(value);
+      let res = await axios.post("/foods/upFoods", {
+        data: this.foodsList[value]
+      });
+      console.log(res);
+      const {
         status,
         data: { data }
-      } = res
-      console.log(data)
-      if(status==200){
-         this.foodsList = data
+      } = res;
+      if (status == 200) {
+        console.log(data);
+        this.$message("商品上架成功");
+        this.getFoodsList()
       }
-      })
+    },
+    edit(value) {
+      console.log(value);
+    }
+  },
+  watch: {
+    couponSelected() {
+      console.log("分类值发生改变");
+      //发送个后端接口,并返回所得到的分类所属内容，此内容不进行分页处理
+      axios
+        .get("/foods/categoryFoods", {
+          params: {
+            couponSelected: this.couponSelected
+          }
+        })
+        .then(res => {
+          console.log(res);
+          const {
+            status,
+            data: { data }
+          } = res;
+          console.log(data);
+          if (status == 200) {
+            this.foodsList = data;
+          }
+        });
     }
   }
 };
 </script>
-<style lang='scss' scoped>
+<style lang='scss'>
 .listFoods {
   .title {
     text-align: center;
@@ -204,7 +211,7 @@ export default {
       color: white;
       font-size: 16px;
     }
-    button{
+    button {
       background: rgb(41, 192, 181);
       border-radius: 15px;
       border: 1px solid rgb(41, 192, 181);
@@ -243,6 +250,16 @@ export default {
             width: 80px;
             height: 30px;
             background: grey;
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            border: none;
+            border-radius: 15px;
+          }
+          .up {
+            width: 80px;
+            height: 30px;
+            background: red;
             color: white;
             text-align: center;
             line-height: 30px;
