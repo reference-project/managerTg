@@ -7,6 +7,7 @@
        <router-link to="/upfoods" class="a">已下架商品</router-link>
       <router-link to="/cs" class="a">添加商品</router-link>
       <router-link to="/listFoods" class="a">商品列表</router-link>
+      <router-link to="/addCategory" class="a">分类管理</router-link>
     </div>
     <div class="content">
       <router-view></router-view>

@@ -119,7 +119,7 @@ export default {
         data:this.foodsList[value]
       })
       console.log(res)
-      const {status,data:{data}} = res
+      const {status} = res
       if(status==200){
          this.$message('商品下架成功')
          this.getFoodsList()

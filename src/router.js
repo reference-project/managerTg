@@ -6,6 +6,7 @@ import Login from './view/login/login.vue'
 import cs from './view/cs/cs.vue'
 import listFoods from './view/listFoods/index.vue'
 import downFoodsList from './view/upFoodsList/upfoodlist.vue'
+import addCategory from './view/addCategory/addCategory.vue'
 Vue.use(Router)
 export default new Router({
     routes:[
@@ -38,6 +39,10 @@ export default new Router({
             path:'/upfoods',
             name:'upfoods',
             component:downFoodsList
+        },{
+            path:'/addCategory',
+            name:'addcategory',
+            component:addCategory
         }
     ]
 })

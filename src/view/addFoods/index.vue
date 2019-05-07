@@ -102,7 +102,7 @@ export default {
       multipartUpload();
     },
     getUrl() {
-     let imgStr=client(this.dataObj).signatureUrl(this.imgUrl);
+     let imgStr=client(this.dataObj).signatureUrl(this.imgUrl,{expires: 315360000});
       this.imgList.push(imgStr)
     }
   }

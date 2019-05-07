@@ -115,6 +115,7 @@
 import OSS from "ali-oss";
 import axios from "axios";
 import { VueEditor } from "vue2-editor";
+
 export default {
   components: {
     VueEditor
@@ -232,7 +233,7 @@ export default {
         bucket: "mycz"
       });
       console.log(this.myImglist);
-      console.log(client.signatureUrl(this.myImglist[0]));
+      console.log(client.signatureUrl(this.myImglist[0],{expires: 315360000}));
     },
     add() {
       this.$refs.file.click();
@@ -268,7 +269,7 @@ export default {
         console.log(this.myImglist, "mylist");
         //得到所有上传图片名称的数组,在将mylist的图片进行签名验证返回图片地址
         let newArr = this.myImglist.map(item => {
-          return client.signatureUrl(item);
+          return client.signatureUrl(item,{expires: 315360000});
         });
         this.$alert("图片上传成功", "提示", {
           confirmBttonText: "确定"
@@ -354,11 +355,13 @@ export default {
       //把获取到的图片url 插入到鼠标所在位置 回显图片
       let strName = timestamp.toString() + random.toString() + file.name;
       clinet.multipartUpload(strName, file).then(res => {
-        console.log(res.name);
+        //设置过期时间
+        //生成url
+        console.log( clinet.signatureUrl(res.name,{expires: 315360000}));
         Editor.insertEmbed(
           cursorLocation,
           "image",
-          clinet.signatureUrl(res.name)
+         
         );
       });
     }
