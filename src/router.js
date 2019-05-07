@@ -7,6 +7,7 @@ import cs from './view/cs/cs.vue'
 import listFoods from './view/listFoods/index.vue'
 import downFoodsList from './view/upFoodsList/upfoodlist.vue'
 import addCategory from './view/addCategory/addCategory.vue'
+import editCategory from './view/editFoods/index.vue'
 Vue.use(Router)
 export default new Router({
     routes:[
@@ -43,6 +44,10 @@ export default new Router({
             path:'/addCategory',
             name:'addcategory',
             component:addCategory
+        },{
+            path:'/editCategory',
+            name:'editCategory',
+            component:editCategory
         }
     ]
 })

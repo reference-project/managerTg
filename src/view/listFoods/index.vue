@@ -35,7 +35,7 @@
             <button @click="down(index)" class="down">下架</button>
           </li>
           <li>
-            <button @click="edit(index)" class="edit">编辑商品</button>
+            <button @click="edit(item.id)" class="edit">编辑商品</button>
           </li>
         </ul>
       </dd>
@@ -126,7 +126,7 @@ export default {
       }
     },
     edit(value){
-      console.log(value)
+     this.$router.push({path:`/editCategory?id=${value}`})
     }
   },
   watch:{
