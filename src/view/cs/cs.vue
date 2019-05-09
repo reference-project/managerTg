@@ -96,10 +96,10 @@
         accept="image/jpg, image/jpeg, image/png, image/bmp"
       >
     </div>
-    <div v-loading="loading">
+    <div v-loading="loading" style="background:white;width:900px; margin-left:20px;">
       <!--上传图片时得加载画面-->
       <VueEditor
-        style="width: 100%"
+        style="width:900px;"
         useCustomImageHandler
         @imageAdded="handleImageAdded"
         :editorToolbar="customToolbar"

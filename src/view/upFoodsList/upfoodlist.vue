@@ -206,10 +206,11 @@ export default {
       border-radius: 0 15px 15px 0;
       border: 1px solid rgb(41, 192, 181);
       width: 60px;
-      height: 28px;
+      height:30px;
       text-align: center;
       color: white;
       font-size: 16px;
+      margin: 0;
     }
     button {
       background: rgb(41, 192, 181);

@@ -7,47 +7,83 @@ import cs from './view/cs/cs.vue'
 import listFoods from './view/listFoods/index.vue'
 import downFoodsList from './view/upFoodsList/upfoodlist.vue'
 import addCategory from './view/addCategory/addCategory.vue'
-import editCategory from './view/editFoods/index.vue'
+import editFoods from './view/editFoods/index.vue'
 Vue.use(Router)
 export default new Router({
     routes:[
         {
             path:'/',
-            redirect: '/index'
+            redirect: '/index',
+            meta:{
+                show:true,
+                requireAuth:true
+            }
         },
         {
               path:'/index',
               name:'index',
-              component:index
+              component:index,
+              meta:{
+                show:true,
+                requireAuth:true
+            }
         },{
             path:'/addfoods',
             name:'addfoods',
-            component:addfoods
+            component:addfoods,
+            meta:{
+                show:true,
+                requireAuth:true
+            }
         },{
             path:'/login',
             name:'login',
-            component:Login
+            component:Login,
+            meta:{
+                show:false,
+                requireAuth:false
+            }
         },{
             path:'/cs',
             name:'cs',
-            component:cs
+            component:cs,
+            meta:{
+                show:true,
+                requireAuth:true
+            }
         },{
             path:'/listFoods',
             name:'listFoods',
-            component:listFoods
+            component:listFoods,
+            meta:{
+                show:true,
+                requireAuth:true
+            }
         },
         {
             path:'/upfoods',
             name:'upfoods',
-            component:downFoodsList
+            component:downFoodsList,
+            meta:{
+                show:true,
+                requireAuth:true
+            }
         },{
             path:'/addCategory',
             name:'addcategory',
-            component:addCategory
+            component:addCategory,
+            meta:{
+                show:true,
+                requireAuth:true
+            }
         },{
-            path:'/editCategory',
-            name:'editCategory',
-            component:editCategory
+            path:'/editFoods',
+            name:'editFoods',
+            component:editFoods,
+            meta:{
+                show:true,
+                requireAuth:true
+            }
         }
     ]
 })

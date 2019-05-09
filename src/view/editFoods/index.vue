@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="24">
         <div class="grid-content bg-purple-dark title">
-          <p>商品上架</p>
+          <p>商品编辑</p>
         </div>
       </el-col>
     </el-row>
@@ -56,7 +56,7 @@
         </div>
       </el-col>
     </el-row>
-     <el-row class="foodsDes">
+    <el-row class="foodsDes">
       <el-col :span="24">
         <div class="grid-content">
           商品ID:
@@ -69,10 +69,10 @@
         <p>请重新上传轮播图</p>
       </el-col>
     </el-row>
-    <div class="vue-uploader">
+    <div class="vue-uploader" >
       <div class="file-list imgUpload">
         <section v-for="(file, index) of files" class="file-item draggable-item" :key="file.name">
-          <img :src="file" alt ondragstart="return false;">
+          <img :src="file.src" alt ondragstart="return false;">
           <span class="file-remove" @click="remove(index)">+</span>
         </section>
         <section v-if="status == 'ready'" class="file-item">
@@ -96,10 +96,10 @@
         accept="image/jpg, image/jpeg, image/png, image/bmp"
       >
     </div>
-    <div v-loading="loading">
+    <div v-loading="loading" style="background:white;width:900px">
       <!--上传图片时得加载画面-->
       <VueEditor
-        style="width: 100%"
+        style="width:900px"
         useCustomImageHandler
         @imageAdded="handleImageAdded"
         :editorToolbar="customToolbar"
@@ -115,7 +115,6 @@
 import OSS from "ali-oss";
 import axios from "axios";
 import { VueEditor } from "vue2-editor";
-
 export default {
   components: {
     VueEditor
@@ -130,7 +129,7 @@ export default {
       myImglist: [],
       content: "",
       loading: false,
-      foodsid:0,
+      foodsid: 0,
       customToolbar: [
         ["bold", "italic", "underline"],
         [{ align: "" }, { align: "center" }, { align: "right" }],
@@ -147,7 +146,7 @@ export default {
       oldPrice: "",
       categoryArry: [],
       uploadImgList: [],
-      couponSelected:''//选择的分类ID
+      couponSelected: "" //选择的分类ID
     };
   },
   mounted() {
@@ -157,28 +156,38 @@ export default {
   },
   created() {
     console.log("页面创建时调用");
-     this.getCategory();
+    this.getCategory();
   },
   methods: {
-    async setFoods(){
-          let res = await axios.get('/foods/getFoodsDetail',{
-              params:{
-                  id:this.$route.query.id
-              }
-          }) 
-          const {status,data:{data}} = res
-          console.log(res,'商品数据') 
-          console.log(this.categoryArry,'分类123')
-          if(status==200){
-              this.foodsName = data.foodsName
-              this.Specifications=data.foodsdescribe,
-              this.foodsid = data.foodsid
-              this.couponSelected = data.couponSelected
-              this.number =data.number
-              this.price = data.foodsPrice
-              this.oldPrice = data.oldPrice
-              this.content = data.content
-          }
+    async setFoods() {
+      let res = await axios.get("/foods/getFoodsDetail", {
+        params: {
+          id: this.$route.query.id
+        }
+      });
+      const {
+        status,
+        data: { data }
+      } = res;
+      console.log(res, "商品数据");
+      console.log(this.categoryArry, "分类123");
+      if (status == 200) {
+        this.foodsName = data.foodsName;
+        (this.Specifications = data.foodsdescribe),
+          (this.foodsid = data.foodsid);
+        this.couponSelected = data.couponSelected;
+        this.number = data.number;
+        this.price = data.foodsPrice;
+        this.oldPrice = data.oldPrice;
+        this.content = data.content;
+        let nearr = data.foodsImgList.map(item => {
+          return {
+            src: item
+          };
+        });
+        console.log(nearr, "新的数组");
+        this.files = nearr;
+      }
     },
     async getCategory() {
       //获得商品分类数据
@@ -192,8 +201,8 @@ export default {
       if (status === 200) {
         this.categoryArry = data;
       }
-     this.couponSelected = data[0].cateGoryId
-     this.setFoods()
+      this.couponSelected = data[0].cateGoryId;
+      this.setFoods();
     },
     handleChange(value) {
       //下拉框改变的方法
@@ -202,50 +211,62 @@ export default {
     async addShops() {
       console.log("上架商品");
       //进行检验
-      if(this.foodsName == ''){
-         this.$message('商品名不能为空')
-         return false
+      if (this.foodsName == "") {
+        this.$message("商品名不能为空");
+        return false;
       }
-      if(this.Specifications==''){
-         this.$message('商品规格不能为空')
-         return false
+      if (this.Specifications == "") {
+        this.$message("商品规格不能为空");
+        return false;
       }
-      if(this.couponSelected==''){
-        this.$message('未选择分类')
-        return false
+      if (this.couponSelected == "") {
+        this.$message("未选择分类");
+        return false;
       }
-      if(this.number==''){
-        this.$message('库存不能为空')
-        return false
+      if (this.number == "") {
+        this.$message("库存不能为空");
+        return false;
       }
-      if(this.uploadImgList.length ==0){
-        this.$message('你没有选择轮播图')
-        return false
-      }
-      if(this.price == ''){
-        this.$message('价格不能为空')
-        return false
+      if (this.price == "") {
+        this.$message("价格不能为空");
+        return false;
       }
       //富文本内容和对比价格可以为空
       //通过验证进行下一步提交到后端保存
-      let data = await axios.get('/foods/addFoods',{
-        params:{
-          foodsid:this.foodsid,
-          foodsName:this.foodsName,
-          Specifications:this.Specifications,
-          number:this.number,
-          price:this.price,
-          oldPrice:this.oldPrice,
-          uploadImgList:this.uploadImgList,
-          couponSelected:this.couponSelected,
-          content:this.content
-        }
-      })
-      console.log(data)
-      if(data.data.code==0){
-        alert('商品上架成功')
+      let upimgList=[]
+      if(this.uploadImgList.length ==0){
+      
+         upimgList = this.files.map(item=>{
+           return item.src
+         })
       }
-
+      else{
+         upimgList = this.uploadImgList
+      }
+      let data = await axios.get("/foods/editFoods", {
+        params: {
+          foodsid: this.foodsid,
+          foodsName: this.foodsName,
+          Specifications: this.Specifications,
+          number: this.number,
+          price: this.price,
+          oldPrice: this.oldPrice,
+          uploadImgList: upimgList,
+          couponSelected: this.couponSelected,
+          content: this.content
+        }
+      });
+  
+      // console.log(code)
+      if(data.status == 200){
+      
+        this.$message(`编辑商品成功`)
+        this.$router.push({path:'/listFoods'})
+      }
+          
+      // }
+    
+     
     },
     getName() {
       const client = new OSS({
@@ -254,14 +275,16 @@ export default {
         accessKeySecret: "ndTGswjQlWA2uz1m4Du3Drd73ULN13",
         bucket: "mycz"
       });
-      console.log(this.myImglist);
-      console.log(client.signatureUrl(this.myImglist[0],{expires: 315360000}));
+     
+      console.log(
+        client.signatureUrl(this.myImglist[0], { expires: 315360000 })
+      );
     },
     add() {
       this.$refs.file.click();
     },
     submit() {
-      console.log(this.files, "这是图片");
+       //上传轮播图
       const client = new OSS({
         region: "oss-cn-shenzhen",
         accessKeyId: "LTAIDaT373YHmkTC",
@@ -269,37 +292,47 @@ export default {
         bucket: "mycz"
       });
       const fNum = this.files;
+      let oldImg = []; //用来存放未改变的数组
       for (var i = 0; i < fNum.length; i++) {
-        var f = fNum[i].file;
-        console.log(f, "这是上传图片的数据");
-        const Name = f.name;
-        console.log(Name);
-        const suffix = Name.substr(Name.indexOf("."));
-        const obj = this.timestamp();
-        const storeAs = "header/" + obj + suffix; // 路径+时间戳+后缀名
-        // console.log(storeAs);
-        this.myImglist.push(storeAs);
-        client
-          .multipartUpload(storeAs, f)
-          .then(result => {
-            console.log(result.res);
-          })
-          .catch(err => {
-            console.log(err);
-            this.$message.error(`遇到无法上传的文件格式,错误为${err}`);
+        if (fNum[i].name) {
+          console.log("存在名字", fNum[i].name);
+          var f = fNum[i].file;
+          console.log(f, "这是上传图片的数据");
+          const Name = f.name;
+          console.log(Name);
+          const suffix = Name.substr(Name.indexOf("."));
+          const obj = this.timestamp();
+          const storeAs = "header/" + obj + suffix; // 路径+时间戳+后缀名
+          // console.log(storeAs);
+          this.myImglist.push(storeAs);
+          client
+            .multipartUpload(storeAs, f)
+            .then(result => {
+              console.log(result.res);
+            })
+            .catch(err => {
+              console.log(err);
+              this.$message.error(`遇到无法上传的文件格式,错误为${err}`);
+            });
+          console.log(this.myImglist, "mylist");
+          //得到所有上传图片名称的数组,在将mylist的图片进行签名验证返回图片地址
+          let newArr = this.myImglist.map(item => {
+            return client.signatureUrl(item, { expires: 315360000 });
           });
-        console.log(this.myImglist, "mylist");
-        //得到所有上传图片名称的数组,在将mylist的图片进行签名验证返回图片地址
-        let newArr = this.myImglist.map(item => {
-          return client.signatureUrl(item,{expires: 315360000});
-        });
-        this.$alert("图片上传成功", "提示", {
-          confirmBttonText: "确定"
-        });
-        this.status = "finished";
-        console.log(newArr); //得到签名后的图片地址数组
-        this.uploadImgList = newArr;
+          this.$alert("图片上传成功", "提示", {
+            confirmBttonText: "确定"
+          });
+          this.status = "finished";
+          console.log(newArr); //得到签名后的图片地址数组
+          this.uploadImgList = newArr;
+          console.log(this.uploadImgList, "新增加的图片");
+        }
+        else{
+          oldImg.push(fNum[i].src)
+        }
       }
+        //处理图片将之前的图片和新的图片合并到uploadImgList
+        this.uploadImgList = oldImg.concat(this.uploadImgList)
     },
     // 时间戳
     timestamp: function() {
@@ -325,7 +358,6 @@ export default {
     Add0: function(m) {
       return m < 10 ? "0" + m : m;
     },
-
     finished() {
       this.files = [];
       this.status = "ready";
@@ -363,7 +395,6 @@ export default {
     },
     handleImageAdded: function(file, Editor, cursorLocation) {
       //上传图片操作
-      console.log(file, "这是图片");
       const clinet = new OSS({
         region: "oss-cn-shenzhen",
         accessKeyId: "LTAIDaT373YHmkTC",
@@ -379,12 +410,8 @@ export default {
       clinet.multipartUpload(strName, file).then(res => {
         //设置过期时间
         //生成url
-        console.log( clinet.signatureUrl(res.name,{expires: 315360000}));
-        Editor.insertEmbed(
-          cursorLocation,
-          "image",
-         
-        );
+        console.log(clinet.signatureUrl(res.name, { expires: 315360000 }));
+        Editor.insertEmbed(cursorLocation, "image");
       });
     }
   }
@@ -399,14 +426,14 @@ export default {
     margin-bottom: 20px;
   }
 }
-.myCategory{
+.myCategory {
   width: 280px;
   height: 30px;
   line-height: 30px;
   border-radius: 8px;
-   option{
-      text-align: center;
-   }
+  option {
+    text-align: center;
+  }
 }
 .bottom {
   width: 100%;
@@ -443,6 +470,7 @@ export default {
 .vue-uploader {
   border: 1px solid #e5e5e5;
   margin: 30px;
+  background: white;
 }
 .vue-uploader .file-list {
   padding: 10px 0px;
