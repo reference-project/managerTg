@@ -8,8 +8,7 @@ Vue.use(ElementUi)
 Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {
   if(to.meta.requireAuth){
-    if(localStorage.getItem('user')){
-  
+    if(localStorage.getItem('myuser')){
         next()
     }else{
       next({

@@ -8,6 +8,8 @@ import listFoods from './view/listFoods/index.vue'
 import downFoodsList from './view/upFoodsList/upfoodlist.vue'
 import addCategory from './view/addCategory/addCategory.vue'
 import editFoods from './view/editFoods/index.vue'
+import Head from './view/head/head.vue'
+
 Vue.use(Router)
 export default new Router({
     routes:[
@@ -84,6 +86,15 @@ export default new Router({
                 show:true,
                 requireAuth:true
             }
+        },{
+            path:'/Head',
+            name:'head',
+            component:Head,
+            meta:{
+                show:true,
+                requireAuth:true
+            }
         }
+        
     ]
 })

@@ -48,7 +48,7 @@ export default {
            console.log(res)
            if(res.data.code==0){
           
-             localStorage.setItem('user',JSON.stringify(res.data))
+             localStorage.setItem('myuser',JSON.stringify(res.data))
              console.log(res.data)
             this.$router.push({path:'/index'})
            }

@@ -192,10 +192,13 @@
                      <router-link to="/listFoods" class="a"> <i class="am-icon-bar-chart sidebar-nav-link-logo"></i>商品列表</router-link>
                 
                 </li>
-         <li class="sidebar-nav-link">
+                 <li class="sidebar-nav-link">
                      <router-link to="/addCategory" class="a"> <i class="am-icon-bar-chart sidebar-nav-link-logo"></i>增加分类</router-link>
                 </li>
-                <li class="sidebar-nav-heading">Page<span class="sidebar-nav-heading-info"> 常用页面</span></li>
+                 <li class="sidebar-nav-link">
+                     <router-link to="/Head" class="a"> <i class="am-icon-bar-chart sidebar-nav-link-logo"></i>团长审核</router-link>
+                </li>
+               
                 <li class="sidebar-nav-link">
                     <a href="javascript:;" class="sidebar-nav-sub-title">
                         <i class="am-icon-table sidebar-nav-link-logo"></i> 数据列表
@@ -246,7 +249,7 @@ export default {
     };
   },
   mounted(){
-   let user =JSON.parse(localStorage.getItem('user'))
+   let user =JSON.parse(localStorage.getItem('myuser'))
    console.log(user,'123456')
    this.user = user.data
    },
