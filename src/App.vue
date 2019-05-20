@@ -198,7 +198,9 @@
                  <li class="sidebar-nav-link">
                      <router-link to="/Head" class="a"> <i class="am-icon-bar-chart sidebar-nav-link-logo"></i>团长审核</router-link>
                 </li>
-               
+                <li class="sidebar-nav-link">
+                     <router-link to="/setCom" class="a"><i class="am-icon-bar-chart sidebar-nav-link-logo"></i>修改佣金比例</router-link>
+                </li>
                 <li class="sidebar-nav-link">
                     <a href="javascript:;" class="sidebar-nav-sub-title">
                         <i class="am-icon-table sidebar-nav-link-logo"></i> 数据列表
@@ -210,10 +212,11 @@
                                 <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 文字列表
                             </a>
                         </li>
-
                         <li class="sidebar-nav-link">
                            <router-link to="/addCategory" class="a">  <span class="am-icon-angle-right sidebar-nav-link-logo"></span>分类管理</router-link>
-              
+                        </li>
+                        <li class="sidebar-nav-link">
+                           <router-link to="/addCategory" class="a">  <span class="am-icon-angle-right sidebar-nav-link-logo"></span>修改佣金比例</router-link>
                         </li>
                     </ul>
                 </li>
@@ -233,7 +236,6 @@
                         <i class="am-icon-tv sidebar-nav-link-logo"></i> 404错误
                     </a>
                 </li>
-
             </ul>
         </div>
       <div class="tpl-content-wrapper">

@@ -9,7 +9,7 @@ import downFoodsList from './view/upFoodsList/upfoodlist.vue'
 import addCategory from './view/addCategory/addCategory.vue'
 import editFoods from './view/editFoods/index.vue'
 import Head from './view/head/head.vue'
-
+import setCom from './view/setCom/setCom.vue'
 Vue.use(Router)
 export default new Router({
     routes:[
@@ -94,7 +94,15 @@ export default new Router({
                 show:true,
                 requireAuth:true
             }
+        },
+        {
+            path:'/setCom',
+            name:'setCom',
+            component:setCom,
+            meta:{
+                show:true,
+                requireAuth:true
+            }
         }
-        
     ]
 })
