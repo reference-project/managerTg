@@ -30,6 +30,7 @@ export default {
         }
       }
       if (value == 1) {
+        
         let res = await axios.post("/setCom/set", {
            setNum: this.setNum
         });

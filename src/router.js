@@ -10,6 +10,7 @@ import addCategory from './view/addCategory/addCategory.vue'
 import editFoods from './view/editFoods/index.vue'
 import Head from './view/head/head.vue'
 import setCom from './view/setCom/setCom.vue'
+import order from './view/order/index.vue'
 Vue.use(Router)
 export default new Router({
     routes:[
@@ -99,6 +100,15 @@ export default new Router({
             path:'/setCom',
             name:'setCom',
             component:setCom,
+            meta:{
+                show:true,
+                requireAuth:true
+            }
+        },
+        {
+            path:'/Order',
+            name:'order',
+            component:order,
             meta:{
                 show:true,
                 requireAuth:true

@@ -201,6 +201,9 @@
                 <li class="sidebar-nav-link">
                      <router-link to="/setCom" class="a"><i class="am-icon-bar-chart sidebar-nav-link-logo"></i>修改佣金比例</router-link>
                 </li>
+                  <li class="sidebar-nav-link">
+                     <router-link to="/Order" class="a"><i class="am-icon-bar-chart sidebar-nav-link-logo"></i>订单管理</router-link>
+                </li>
                 <li class="sidebar-nav-link">
                     <a href="javascript:;" class="sidebar-nav-sub-title">
                         <i class="am-icon-table sidebar-nav-link-logo"></i> 数据列表
@@ -251,9 +254,14 @@ export default {
     };
   },
   mounted(){
-   let user =JSON.parse(localStorage.getItem('myuser'))
-   console.log(user,'123456')
-   this.user = user.data
+//    let user =JSON.parse(localStorage.getItem('myuser'))
+//    console.log(user,'123456')
+//    this.user = user.data
+      let user = localStorage.getItem('myuser')
+      console.log(user,'12')
+      user = JSON.parse(user)
+      console.log(user)
+      this.user=user.data
    },
   methods: {}
 };

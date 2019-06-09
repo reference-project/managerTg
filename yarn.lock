@@ -2988,6 +2988,11 @@ dotenv@^7.0.0:
   resolved "http://registry.npm.taobao.org/dotenv/download/dotenv-7.0.0.tgz#a2be3cd52736673206e8a85fb5210eea29628e7c"
   integrity sha1-or481Sc2ZzIG6KhftSEO6ilijnw=
 
+downloadjs@^1.4.7:
+  version "1.4.7"
+  resolved "https://registry.yarnpkg.com/downloadjs/-/downloadjs-1.4.7.tgz#f69f96f940e0d0553dac291139865a3cd0101e3c"
+  integrity sha1-9p+W+UDg0FU9rCkROYZaPNAQHjw=
+
 duplexer@^0.1.1:
   version "0.1.1"
   resolved "http://registry.npm.taobao.org/duplexer/download/duplexer-0.1.1.tgz#ace6ff808c1ce66b57d1ebf97977acb02334cfc1"
@@ -8664,6 +8669,13 @@ vue-hot-reload-api@^2.3.0:
   version "2.3.3"
   resolved "http://registry.npm.taobao.org/vue-hot-reload-api/download/vue-hot-reload-api-2.3.3.tgz#2756f46cb3258054c5f4723de8ae7e87302a1ccf"
   integrity sha1-J1b0bLMlgFTF9HI96K5+hzAqHM8=
+
+vue-json-excel@^0.2.98:
+  version "0.2.98"
+  resolved "https://registry.yarnpkg.com/vue-json-excel/-/vue-json-excel-0.2.98.tgz#1d882fd97f8bd7caa1864014e3680b2ddd0e94bc"
+  integrity sha512-hPA3/cOe5nGbEZiJyfpdBIdqBExxF6EhMhpX6vC654PYbTVzdzp7O9ZsC1AgqbgRDR8VjzAaPaEeHg2vGS88FQ==
+  dependencies:
+    downloadjs "^1.4.7"
 
 vue-loader@^15.7.0:
   version "15.7.0"
